@@ -1,0 +1,94 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-image: url("/img/background.jpeg");
+    color: #fff;
+}
+
+p {
+    margin: 0 !important;
+}
+
+main {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 10px;
+    border-bottom: 1px solid #9d9d9d69;
+}
+
+.wrapper-cronometro {
+    flex: 1;
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.element-cronometro {
+    display: flex;
+    border-radius: 100%;
+    border: 1px solid #fff;
+    width: 500px;
+    height: 500px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+
+.element-cronometro h2 {
+    font-size: 60px;
+    font-weight: 900;
+}
+
+.element-cronometro span {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+i {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.icons-control {
+    font-size: 20px;
+    color: #000;
+}
+
+.wrapper-controls {
+    padding: 10px 10px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper-controls:hover { 
+    background-color: #BEDCFE;
+    transition: 1s;
+    cursor: pointer;
+}
+
+footer {
+    background-color: #000000;
+    color: #fff;
+    padding: 10px;
+}
+  
