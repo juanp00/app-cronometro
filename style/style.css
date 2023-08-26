@@ -1,16 +1,22 @@
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: auto;
     font-family: 'Poppins', sans-serif;
+}
+
+::selection {
+    background-color: #00ac86;
+    color: #000;
 }
 
 body {
     background-image: url("/img/background.jpeg");
     color: #fff;
+    background-size: cover;
 }
 
-p {
+p, h3 {
     margin: 0 !important;
 }
 
@@ -27,7 +33,6 @@ header {
 
 .wrapper-cronometro {
     flex: 1;
-    padding: 20px;
     flex-direction: column;
     gap: 20px;
 }
@@ -61,6 +66,10 @@ header {
     align-items: center;
 }
 
+.wrapper-records h3{ 
+    font-size: 20px;
+}
+
 i {
     width: 20px !important;
     height: 20px !important;
@@ -86,9 +95,49 @@ i {
     cursor: pointer;
 }
 
+.wrapper-records {
+    background-color: #282828;
+    color: #fff;
+    margin: 10px;
+    padding: 7px 15px;
+    border-radius: 12px;
+}
+
+#sectionRecord {
+    margin-top: 10px;
+    padding: 0 !important;
+}
+
+.wrapper-icons {
+    gap: 15px;
+}
+
+.icons-records:hover {
+    cursor: pointer;
+}
+
+.icon-delete {
+    color: #e60000;
+}
+
 footer {
     background-color: #000000;
     color: #fff;
     padding: 10px;
 }
   
+@media (max-width: 475px) {
+    .element-cronometro {
+        width: 300px;
+        height: 300px;
+    }
+    .wrapper-records h3{
+        font-size: 13px !important;
+    }
+    .wrapper-records p{
+        font-size: 12px !important;
+    }
+    .wrapper-records {
+        gap: 10px;
+    }
+}

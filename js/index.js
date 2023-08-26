@@ -41,7 +41,16 @@ function stop(){
     const currentTime  = document.querySelector('.current-timer').textContent;
     const dataAtual    = getCurrentDate();
     const newRecord    = new RecordedTimes(generateUniqueID(5), 'Record sem nome', currentTime, dataAtual); //No ID ele chama uma função de gerar id que não existam no localStorage
-    newRecord.addRecordedTime(newRecord); 
+    const elementIdRemove = 'sectionRecord';
+    
+    //Salva o novo record no local storage
+    newRecord.saveData(newRecord); 
+    
+    //Remove a seção de records antiga para trazer os records atualizados
+    removeElementId(elementIdRemove)
+    
+    //Cria a seção de records atualizada com o último record adicionado
+    createRecordedSaves()
 
     // para de contar e reinicia o timer
     clearInterval(interval)
@@ -78,7 +87,17 @@ function getCurrentDate() {
     const hora = String(dataAtual.getHours()).padStart(2, '0');
     const minuto = String(dataAtual.getMinutes()).padStart(2, '0');
 
-    return dataFormatada = `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+    const dataFormatada = `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+
+    return dataFormatada;
+}
+
+function removeElementId(elementRemove) {
+    const idElementRemove = document.getElementById(elementRemove);
+    console.log(idElementRemove);
+    if(idElementRemove) {
+        idElementRemove.remove()
+    }
 }
 
 //Cria os records de tempos salvos anteriormente em local Storage toda vez que a página é carregada
@@ -87,31 +106,93 @@ function createRecordedSaves() {
     const records = JSON.parse(recordsString);
 
     if (records) {
+        //Caso tenha chamado essa função através da função stop, onde remove a section de record, aqui cria a seção novamente com os dados atualizados
+        if(document.querySelector('#sectionRecord') === null) {
+            const sectionReference = document.querySelector('.wrapper-cronometro');
+            const createSection = document.createElement('section');
+            createSection.classList.add('container','mb-4');
+            createSection.setAttribute('id', 'sectionRecord');
+            sectionReference.append(createSection);
+            addEventIcon();
+        }
+
         const section = document.querySelector('#sectionRecord');
 
         records.forEach(element => {
             const div        = document.createElement('div');
+            const divIcons   = document.createElement('div');
             const title      = document.createElement('h3');
             const recordTime = document.createElement('p');
             const createdAt  = document.createElement('p');
+            const iconEdit   = document.createElement('i');
+            const iconDelete = document.createElement('i');
 
-            div.classList.add('d-flex', 'align-items-center', 'justify-content-between');
+            iconEdit.setAttribute('data-key', element.id);
+            iconDelete.setAttribute('data-key', element.id);
+            divIcons.classList.add('wrapper-icons', 'd-flex', 'icon-edit');
+            iconEdit.classList.add('fa-solid', 'fa-pen-to-square', 'icon-edit', 'icons-records');
+            iconDelete.classList.add('fa-solid', 'fa-trash', 'icon-delete', 'icons-records')
+            div.classList.add('d-flex', 'align-items-center', 'justify-content-between', 'wrapper-records');
             title.innerHTML      = element.name;
             recordTime.innerHTML = "Tempo: " + element.time;
-            createdAt.innerHTML  = "Criado em: " + element.createdAt;
+            createdAt.innerHTML  = element.createdAt;
 
-            div.append(title, recordTime, createdAt);
+            divIcons.append(iconEdit, iconDelete);
+            div.append(title, recordTime, createdAt, divIcons);
             section.append(div);
         });
+        
+        
     }
+    addEventIcon();
+}
+
+function deleteRecord(id) {
+    const elementIdRemove = 'sectionRecord';
+    //Remove a seção de records antiga para trazer os records atualizados
+    removeElementId(elementIdRemove)
+
+    const storedDataString = localStorage.getItem('records');
+    
+    if (storedDataString) {
+        let storedData = JSON.parse(storedDataString);
+
+        // Encontre o índice do objeto com o ID correspondente
+        const index = storedData.findIndex(item => item.id === id);
+        
+        if (index !== -1) {
+            // Remove o item do array
+            storedData.splice(index, 1);
+
+            // Atualiza os dados no localStorage
+            localStorage.setItem('records', JSON.stringify(storedData));
+        }
+    }
+}
+
+function addEventIcon() {
+    const iconsDelete = document.querySelectorAll('.icon-delete');
+    iconsDelete.forEach(icon => {
+        const iconId = icon.dataset.key; 
+        icon.addEventListener('click', () => {
+            deleteRecord(iconId);
+            // Sua função a ser chamada quando a página é iniciada
+            createRecordedSaves();
+        });
+        
+    });
 }
 
 iconStart.addEventListener('click', initPlay); 
 iconPause.addEventListener('click', pause); 
 iconStop.addEventListener('click', stop)
 
+
+
+
 //Cria os tempos salvos anteriormente
 document.addEventListener('DOMContentLoaded', function() {
-    // Sua função a ser chamada quando a página é iniciada
     createRecordedSaves();
-  });
+    addEventIcon();
+});
+
