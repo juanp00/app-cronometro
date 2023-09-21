@@ -45,16 +45,11 @@ function stop(){
     
     //Salva o novo record no local storage
     newRecord.saveData(newRecord); 
-    
-    //Remove a seção de records antiga para trazer os records atualizados
-    removeElementId(elementIdRemove)
-    
-    //Cria a seção de records atualizada com o último record adicionado
-    createRecordedSaves()
 
     // para de contar e reinicia o timer
     clearInterval(interval)
     currentTimer.innerHTML = "00:00";
+    location.reload();
 }
 
 //Gera números para ID's que não existam no localStorage
@@ -96,7 +91,7 @@ function removeElementId(elementRemove) {
     const idElementRemove = document.getElementById(elementRemove);
     console.log(idElementRemove);
     if(idElementRemove) {
-        idElementRemove.remove()
+        idElementRemove.remove();
     }
 }
 
@@ -113,7 +108,7 @@ function createRecordedSaves() {
             createSection.classList.add('container','mb-4');
             createSection.setAttribute('id', 'sectionRecord');
             sectionReference.append(createSection);
-            addEventIcon();
+            addEventIconDelete();
         }
 
         const section = document.querySelector('#sectionRecord');
@@ -141,16 +136,15 @@ function createRecordedSaves() {
             div.append(title, recordTime, createdAt, divIcons);
             section.append(div);
         });
-        
-        
     }
-    addEventIcon();
+    //Adiciona os eventos de clique nos icones de remover item
+    addEventIconDelete();
 }
 
 function deleteRecord(id) {
     const elementIdRemove = 'sectionRecord';
     //Remove a seção de records antiga para trazer os records atualizados
-    removeElementId(elementIdRemove)
+    removeElementId(elementIdRemove);
 
     const storedDataString = localStorage.getItem('records');
     
@@ -170,29 +164,68 @@ function deleteRecord(id) {
     }
 }
 
-function addEventIcon() {
+function addEventIconDelete() {
     const iconsDelete = document.querySelectorAll('.icon-delete');
     iconsDelete.forEach(icon => {
         const iconId = icon.dataset.key; 
         icon.addEventListener('click', () => {
             deleteRecord(iconId);
-            // Sua função a ser chamada quando a página é iniciada
+            //função a ser chamada quando a página é iniciada
             createRecordedSaves();
         });
-        
+    });
+}
+
+function editRecord(id) {
+    const popup     = document.querySelector('.popup-overlay');
+    const btnSubmit = document.getElementById('save-btn-popup');
+    const inputName = document.querySelector('.input-new-name');
+    const btnCancel = document.querySelector('#close-btn-popup');
+
+    let newName
+    popup.classList.add('popup-active');
+
+    btnSubmit.addEventListener('click', () => {
+        if(inputName.value) {
+            newName = inputName.value;
+            popup.classList.remove('popup-active');
+            popup.classList.add('popup-hidden');
+
+            //Atualiza o nome no local storage
+            const recordUpdated = new RecordedTimes();
+            recordUpdated.setName(id, newName);
+            
+            // Recarrega a página após a atualização
+            location.reload();
+        }
+    });
+
+    btnCancel.addEventListener('click', () => {
+        popup.classList.remove('popup-active');
+        popup.classList.add('popup-hidden');
+        location.reload();
+    });
+}
+
+function addEventIconEdit() {
+    const iconsEdit = document.querySelectorAll('.icon-edit');
+    iconsEdit.forEach(iconElement => {
+        const iconEditId = iconElement.dataset.key; 
+        iconElement.addEventListener('click', () => {
+            editRecord(iconEditId);
+        });
     });
 }
 
 iconStart.addEventListener('click', initPlay); 
 iconPause.addEventListener('click', pause); 
-iconStop.addEventListener('click', stop)
+iconStop.addEventListener('click', stop);
 
 
-
-
-//Cria os tempos salvos anteriormente
+//Lista na página os records salvos anteriormente assim que a página é carregada
 document.addEventListener('DOMContentLoaded', function() {
     createRecordedSaves();
-    addEventIcon();
+    addEventIconDelete();
+    addEventIconEdit();
 });
 

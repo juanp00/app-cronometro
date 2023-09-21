@@ -22,8 +22,23 @@ export default class RecordedTimes {
         return this.createdAt;
     }
 
-    setName(newName) {
-        this.name = newName;
+    setName(id, newName) {
+        const storedDataString = localStorage.getItem('records');
+    
+        if (storedDataString) {
+            let storedData = JSON.parse(storedDataString);
+
+            // Encontre o índice do objeto com o ID correspondente
+            const index = storedData.findIndex(item => item.id === id);
+            
+            if (index !== -1) {
+                // Remove o item do array
+                storedData[index].name = newName;
+
+                // Atualize os dados no localStorage após a alteração
+                localStorage.setItem('records', JSON.stringify(storedData));
+            }
+        }
     }
 
     saveData(data) {
