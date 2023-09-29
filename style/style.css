@@ -21,9 +21,14 @@ p, h3 {
 }
 
 main {
-    min-height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    padding-bottom: 50px !important;
+}
+
+#sectionRecord {
+    padding-bottom: 50px !important;
 }
 
 header {
@@ -105,7 +110,7 @@ i {
 
 #sectionRecord {
     margin-top: 10px;
-    padding: 0 !important;
+    padding-bottom: 50 !important;
 }
 
 .wrapper-icons {

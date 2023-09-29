@@ -170,8 +170,7 @@ function addEventIconDelete() {
         const iconId = icon.dataset.key; 
         icon.addEventListener('click', () => {
             deleteRecord(iconId);
-            //função a ser chamada quando a página é iniciada
-            createRecordedSaves();
+            location.reload();
         });
     });
 }
